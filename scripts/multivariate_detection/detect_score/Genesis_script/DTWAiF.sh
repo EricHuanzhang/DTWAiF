@@ -1,0 +1,2 @@
+python ./scripts/run_benchmark.py --config-path "unfixed_detect_score_multi_config.json" --data-name-list "Genesis.csv" --model-name "DTWAiF.DTWAiF" --model-hyper-params '{"Mlr": 1e-04,"auxi_lambda": 0.5, "batch_size": 64, "cf_dim": 256, "d_ff": 512, "d_model": 256, "dc_lambda": 0.1, "e_layers": 2, "head_dim": 32, "lr": 0.0005, "n_heads": 4, "num_epochs": 1, "score_lambda": 2.0, "seq_len": 128,"SMOOTH_WINDOW":11,"score_len_divisor": 1,"channel_min_unique":0}' --gpus 0 --num-workers 4 --timeout 60000 --save-path "score/DTWAiF"
+
