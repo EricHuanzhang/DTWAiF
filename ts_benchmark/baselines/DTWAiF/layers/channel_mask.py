@@ -1,15 +1,4 @@
-# This file is reproduced verbatim from the official CATCH implementation
-# distributed with the TFB benchmark, and is included here so that the DTWAiF
-# package is self-contained. All rights to the reused code remain with its
-# original authors; see NOTICE for details.
 
-'''
-* @author: EmpyreanMoon
-*
-* @create: 2024-09-02 17:32
-*
-* @description: 
-'''
 import torch
 import torch.nn as nn
 from einops import rearrange
@@ -17,6 +6,12 @@ from torch.nn.functional import gumbel_softmax
 
 
 class channel_mask_generator(torch.nn.Module):
+    """
+    Generate a sparse cross-channel attention mask.
+
+    A Gumbel-softmax relaxation makes the discrete keep/drop decision
+    differentiable, so the mask is learned jointly with the reconstruction.
+    """
     def __init__(self, input_size, n_vars):
         super(channel_mask_generator, self).__init__()
         self.generator = nn.Sequential(torch.nn.Linear(input_size, n_vars, bias=False), nn.Sigmoid())
@@ -24,8 +19,7 @@ class channel_mask_generator(torch.nn.Module):
             self.generator[0].weight.zero_()
         self.n_vars = n_vars
 
-    def forward(self, x):  # x: [(bs x patch_num) x n_vars x patch_size]
-
+    def forward(self, x):
         distribution_matrix = self.generator(x)
 
         resample_matrix = self._bernoulli_gumbel_rsample(distribution_matrix)
@@ -41,7 +35,6 @@ class channel_mask_generator(torch.nn.Module):
         b, c, d = distribution_matrix.shape
 
         flatten_matrix = rearrange(distribution_matrix, 'b c d -> (b c d) 1')
-        # 增加极小值保护，防止 Sigmoid 饱和导致 log(0) 产生 NaN
         flatten_matrix = torch.clamp(flatten_matrix, min=1e-6, max=1.0 - 1e-6)
 
         r_flatten_matrix = 1 - flatten_matrix
@@ -50,7 +43,6 @@ class channel_mask_generator(torch.nn.Module):
         log_r_flatten_matrix = torch.log(r_flatten_matrix / flatten_matrix)
 
         new_matrix = torch.concat([log_flatten_matrix, log_r_flatten_matrix], dim=-1)
-        # 核心修复：推理期绝对确定性路由
         if self.training:
             resample_matrix = gumbel_softmax(new_matrix, hard=True)
         else:
