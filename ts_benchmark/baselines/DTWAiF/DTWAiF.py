@@ -1,5 +1,5 @@
 """
-DTWAiF: 
+DTWAiF:
 
 Pipeline
     detect_fit      train the reconstructor on the training split
@@ -15,7 +15,7 @@ Scoring, once the model has produced a per-channel error matrix E[T, C]:
     solve_pot             extreme-value threshold fitted on the reference pool
 
 The model interface (detect_fit / detect_score / detect_label) follows the
-convention of the TFB benchmark and its CATCH baseline.
+convention of the TAB benchmark.
 """
 import time
 import warnings
@@ -35,9 +35,6 @@ from ts_benchmark.baselines.utils import anomaly_detection_data_provider, train_
 from ts_benchmark.baselines.DTWAiF.utils.loss import WaveletDomainAuxiliaryLoss, TimeDomainSobolevLoss, InverseTransformProjectionLoss_v2
 from ts_benchmark.baselines.DTWAiF.utils.tools import EarlyStopping, adjust_learning_rate, solve_pot
 
-
-# Defaults for every hyper-parameter. `search_*` entries are grid axes
-# consumed by the benchmark strategy, not by the model itself.
 DEFAULT_TRANSFORMER_BASED_HYPER_PARAMS = {
     "lr": 0.0001,
     "Mlr": 0.00001,
@@ -465,7 +462,7 @@ class DTWAiF:
                     self.optimizerM.step()
                     self.optimizerM.zero_grad()
 
-                if (i + 1) % 10 == 0:
+                if (i + 1) % 100 == 0:
                     print(
                         "\titers: {0}, epoch: {1} | training time loss: {2:.7f} | training fre loss: {3:.7f} | training dc loss: {4:.7f}".format(
                             i + 1, epoch + 1, time_loss.item(), auxi_loss.item(), dcloss.item()
@@ -500,21 +497,6 @@ class DTWAiF:
             adjust_learning_rate(self.optimizer, scheduler, epoch + 1, self.config)
             adjust_learning_rate(self.optimizerM, schedulerM, epoch + 1, self.config, printout=False)
 
-    def _freq_needed(self):
-        """
-        Whether any positive score_lambda appears in the grid, i.e. whether
-        the frequency-domain error matrix has to be computed at all.
-        """
-        try:
-            g = getattr(self.config, 'search_score_lambdas', None)
-            if g is None:
-                return False
-            if not isinstance(g, (list, tuple)):
-                g = [g]
-            return any((v is not None) and float(v) > 0 for v in g)
-        except (TypeError, ValueError):
-            return False
-
     def _get_raw_matrices(self, data_loader, series_name: str = None,
                           return_label: bool = False, return_details: bool = False,
                           cache_tag: str = None):
@@ -523,10 +505,6 @@ class DTWAiF:
         Run the model over a loader and return the raw per-channel matrices.
 
         :return: (E_time[T, C], E_freq[T, C] or None, recon[T, C] or None, label[T] or None)
-
-        The four matrices are cached per (series, mode, cache_tag). Every
-        post-processing hyper-parameter acts on the matrices rather than on the
-        model, so a grid search over the scoring stage reuses one forward pass.
 
         """
         self.model.eval()
@@ -558,7 +536,7 @@ class DTWAiF:
                 raw_time_mse = torch.pow(clipped_error, 2)
 
                 raw_freq_error = None
-                if self.config.score_lambda > 0 or self._freq_needed():
+                if self.config.score_lambda > 0:
                     target_coeffs = self._extract_target_wavelet_features(batch_x)
                     recon_coeffs = self._extract_target_wavelet_features(out_final)
                     raw_freq_error = self.freq_proj_loss(recon_coeffs, target_coeffs)
@@ -653,10 +631,6 @@ class DTWAiF:
         """
 
         Coerce a config entry to a number, falling back to `default` with a warning.
-
-        The grid-search framework assigns list elements straight onto the config, so a
-        single null in the hyper-parameter JSON would otherwise surface much later as
-        an unrelated TypeError.
 
         """
         if v is None or (isinstance(v, str) and not v.strip()):
