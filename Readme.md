@@ -61,9 +61,9 @@ You can obtained the datasets from [GoogleDrive](https://drive.google.com/file/d
 We provide the experiment scripts for DTWAiF under the folder `./scripts/multivariate_detection`. For example you can reproduce a experiment result as the following:
 
 ```
-sh ./scripts/multivariate_detection/detect_label/MSL_script/DTWAiF.sh
+sh ./scripts/multivariate_detection/detect_label/Genesis_script/DTWAiF.sh
 
-sh ./scripts/multivariate_detection/detect_score/MSL_script/DTWAiF.sh
+sh ./scripts/multivariate_detection/detect_score/Genesis_script/DTWAiF.sh
 ```
 
 
