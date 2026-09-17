@@ -1,18 +1,10 @@
 """
-DTWAiF: a Dual-Track Wavelet Transformer for time series anomaly detection.
-
-The detector reconstructs a multivariate series in the wavelet domain and turns
-the reconstruction error into a per-timestamp anomaly score. Two tracks are kept
-separate throughout the encoder: a *context* track carrying the approximation
-band cA, and a *content* track carrying the full set of bands. Attention queries
-and keys are drawn from the context track only, while values come from the
-content track, so channel routing is decided by slow structure rather than by
-high-frequency noise.
+DTWAiF: 
 
 Pipeline
     detect_fit      train the reconstructor on the training split
     detect_score    per-timestamp anomaly scores for the test split
-    detect_label    scores plus binary labels at a POT or percentile threshold
+    detect_label    scores plus binary labels at a POT threshold
 
 Scoring, once the model has produced a per-channel error matrix E[T, C]:
     _build_E              temporal smoothing, frequency-error fusion, per-channel
