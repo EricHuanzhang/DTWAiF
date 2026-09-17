@@ -33,11 +33,11 @@ ts_benchmark/baselines/DTWAiF/
 ├── models/DTWAiF_model.py                     the dual-track wavelet reconstructor
 ├── layers/
 │   ├── cross_channel_bandwise_Transformer.py  band-wise two-track attention
-│   └── channel_mask.py                        Gumbel-softmax channel mask
+│   └── channel_mask.py                        channel mask
 └── utils/
-    ├── loss.py                                Time, wavelet losses
+    ├── loss.py                                time, wavelet losses
     ├── ch_discover_loss.py                    contrastive channel regulariser
-    └── tools.py                               POT threshold, early stopping, LR schedule
+    └── tools.py                               POT threshold, early stopping
 
 tools/                                         equivalence-verification scripts
 ```
