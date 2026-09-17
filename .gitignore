@@ -4,6 +4,8 @@ __pycache__/
 data/
 datasets/
 checkpoints/
+result/
+.idea/
 *.pth
 *.pt
 *.ckpt
