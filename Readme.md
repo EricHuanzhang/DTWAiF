@@ -38,8 +38,6 @@ ts_benchmark/baselines/DTWAiF/
     ├── loss.py                                time, wavelet losses
     ├── ch_discover_loss.py                    contrastive channel regulariser
     └── tools.py                               POT threshold, early stopping
-
-tools/                                         equivalence-verification scripts
 ```
 
 ## Quickstart
