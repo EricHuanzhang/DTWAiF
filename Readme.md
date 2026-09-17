@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**DTWAiF** is a **d**ual-**t**rack **w**avelet **a**symmetric **i**nverted **T**ransformer for multivariate time-series anomaly detection. It uses wavelet approximation coefficients as coarse context to generate queries, keys, and a learned channel mask for cross-channel attention, while a separate content track preserves all wavelet bands for value projection and reconstruction. Heterogeneous normalization handles continuous measurements and discrete control signals differently, and anomaly scores combine time- and wavelet-domain residuals with distibution drift correction. 
+**DTWAiF** is a **d**ual-**t**rack **w**avelet **a**symmetric **i**nverted **T**ransformer for multivariate time-series anomaly detection. It uses wavelet approximation coefficients as coarse context to generate queries, keys, and a learned channel mask for cross-channel attention, while a separate content track preserves all wavelet bands for value projection and reconstruction. Heterogeneous normalization handles continuous measurements and discrete control signals differently to reduce distortion associated with uniform variance-based scaling, and anomaly scores combine time- and wavelet-domain residuals with distibution drift correction. 
 
 <img width="2638" height="997" alt="architecture" src="https://github.com/user-attachments/assets/d3c36761-cc95-40ff-9842-697d1638c980" />
 
