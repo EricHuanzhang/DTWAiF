@@ -35,7 +35,7 @@ ts_benchmark/baselines/DTWAiF/
 │   ├── cross_channel_bandwise_Transformer.py  band-wise two-track attention
 │   └── channel_mask.py                        Gumbel-softmax channel mask
 └── utils/
-    ├── loss.py                                Sobolev, wavelet and projection losses
+    ├── loss.py                                Time, wavelet losses
     ├── ch_discover_loss.py                    contrastive channel regulariser
     └── tools.py                               POT threshold, early stopping, LR schedule
 
