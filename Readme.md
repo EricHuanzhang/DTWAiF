@@ -44,9 +44,14 @@ ts_benchmark/baselines/DTWAiF/
 
 ### Installation
 
-Given a python environment (**note**: this project is fully tested under python 3.8), install the dependencies with the following command:
+Clone the repository and set up the environment as follows:
 
 ```
+# Make conda environment
+conda create -n DTWAiF python=3.11 -y
+conda activate DTWAiF
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
@@ -66,12 +71,14 @@ sh ./scripts/multivariate_detection/detect_score/Genesis_script/DTWAiF.sh
 
 
 
-## Contact
+## Acknowledgement
 
-If you have any questions or suggestions, feel free to contact:
+We sincerely appreciate the following GitHub repositories for their valuable contributions:
 
-- Eric Cao caoj20@fudan.edu.cn
+https://github.com/thuml/Time-Series-Library
 
+https://github.com/decisionintelligence/TAB
 
+https://github.com/decisionintelligence/CATCH
 
-Or describe it in Issues.
+https://github.com/decisionintelligence/CrossAD
