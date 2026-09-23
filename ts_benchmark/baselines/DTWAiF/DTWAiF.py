@@ -449,7 +449,7 @@ class DTWAiF:
 
                 auxi_loss = self.wavelet_criterion(recon_coeffs_list, target_wave_coeffs_list)
 
-                total_loss = time_loss + self.config.dc_lambda * dcloss + self.config.auxi_lambda * auxi_loss
+                total_loss = time_loss + self.config.dc_lambda * dcloss
 
                 epoch_loss_tracker.append(total_loss.item())
 
